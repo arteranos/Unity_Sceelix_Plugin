@@ -122,12 +122,9 @@ namespace Assets.Sceelix.Editor
 
                 //and store it to the disk
                 AssetDatabase.CreateAsset(createdAsset, assetLocation);
-
                 AssetDatabase.SetLabels(createdAsset, new[] { "Sceelix" });
-
-                AssetDatabase.ImportAsset(assetLocation);
+                AssetDatabase.SaveAssets();
             }
-
 
             return AssetDatabase.LoadAssetAtPath<T>(assetLocation);
         }
@@ -160,7 +157,13 @@ namespace Assets.Sceelix.Editor
             gameObject.tag = tagName;
         }
 
-        
+        public void RefreshAssets()
+        {
+            if (!StorePhysicalAssets) return;
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
 
         public bool StorePhysicalAssets
         {

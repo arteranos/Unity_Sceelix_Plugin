@@ -74,6 +74,11 @@ namespace Assets.Sceelix.Contexts
             gameObject.tag = tag;
         }
 
+        public void RefreshAssets()
+        {
+
+        }
+
         public bool RemoveOnRegeneration { get; set; }
         public void ReportObjectCreation(GameObject sceneGameObject)
         {
