@@ -44,7 +44,7 @@ namespace Assets.Sceelix.Processors.Components
 
                     splatPrototypes.Add(new SplatPrototype()
                     {
-                        texture = String.IsNullOrEmpty(name) ? defaultTexture : context.CreateOrGetAssetOrResource(name, () => textureToken["Content"].ToTexture()),
+                        texture = String.IsNullOrEmpty(name) ? defaultTexture : context.CreateOrGetAssetOrResource(name + ".asset", () => textureToken["Content"].ToTexture()),
                         tileSize = tileSize
                     });
                 }
