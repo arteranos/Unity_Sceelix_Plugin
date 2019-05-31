@@ -37,8 +37,12 @@ namespace Assets.Sceelix.Processors.Messages
                 GameObject sceneGameObject = new GameObject();
                 sceneGameObject.name = data["Name"].ToObject<String>();
 
-                var sceneComponent = sceneGameObject.AddComponent<SceelixDesignerComponent>();
-                sceneComponent.RemoveOnRegeneration = context.RemoveOnRegeneration;
+                // Only add the component if we intend to remove the output on a later run.
+                if (context.RemoveOnRegeneration)
+                {
+                    var sceneComponent = sceneGameObject.AddComponent<SceelixDesignerComponent>();
+                    sceneComponent.RemoveOnRegeneration = true;
+                }
 
 
 
