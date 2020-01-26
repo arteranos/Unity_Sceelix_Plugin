@@ -23,7 +23,10 @@ namespace Assets.Sceelix.Editor
             foreach (string assetGuid in sceelixAssetGuids)
             {
                 var assetPath = AssetDatabase.GUIDToAssetPath(assetGuid);
-                referenceCount.Add(assetPath,0);
+
+                // Breaking change: Dictionary.Add throws an exception when the key is already present
+                if(!referenceCount.ContainsKey(assetPath))
+                    referenceCount.Add(assetPath,0);
             }
 
             //go over existing scene files to see which ones are referencing the assets

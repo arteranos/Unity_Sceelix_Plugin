@@ -21,6 +21,14 @@ namespace Assets.Sceelix.Processors.Components
             var resolution = jtoken["Resolution"].ToObject<int>();
             var sizes = jtoken["Size"].ToVector3();
 
+            // AltspaceVR specific: Copy the default material to avoid Altspace using a cut down version
+            Material terrainMat = context.CreateOrGetAssetOrResource("Sceelix Terrain Default.mat", () =>
+            {
+                Shader shad = Shader.Find("Nature/Terrain/Standard");
+                Material mat = new Material(shad);
+                return mat;
+            });
+
             TerrainData newTerrain = context.CreateOrGetAssetOrResource<TerrainData>("Sceelix Terrain.asset", () =>
             {
                 //initialize the terrain data instance and set height data
@@ -36,26 +44,33 @@ namespace Assets.Sceelix.Processors.Components
                 if (materialToken != null)
                 {
                     var defaultTexture = Texture2D.whiteTexture.ToMipmappedTexture();
-                    List<SplatPrototype> splatPrototypes = new List<SplatPrototype>();
+                    List<TerrainLayer> terrainLayers = new List<TerrainLayer>();
 
                     var tileSize = materialToken["TileSize"].ToVector2();
                     foreach (JToken textureToken in materialToken["Textures"].Children())
                     {
                         var name = textureToken["Name"].ToObject<String>();
 
-                        splatPrototypes.Add(new SplatPrototype()
-                        {
-                            texture = String.IsNullOrEmpty(name) ? defaultTexture : context.CreateOrGetAssetOrResource(name + ".asset", () => textureToken["Content"].ToTexture()),
-                            tileSize = tileSize
-                        });
+                        TerrainLayer layer = context.CreateOrGetAssetOrResource("Layer_" + name + ".asset",
+                            () => new TerrainLayer()
+                            {
+                                diffuseTexture = String.IsNullOrEmpty(name) 
+                                    ? defaultTexture
+                                    : context.CreateOrGetAssetOrResource(name + ".asset", () => textureToken["Content"].ToTexture()),
+                                tileSize = tileSize
+                            });
+
+                        terrainLayers.Add(layer);
                     }
 
-                    terrainData.splatPrototypes = splatPrototypes.ToArray();
+                    terrainData.terrainLayers = terrainLayers.ToArray();
                     terrainData.RefreshPrototypes();
                 }
 
                 return terrainData;
             });
+
+            
 
             // UNITY BUG: Doesn't allow terrain assets to be initialized in one go, we need to
             // save and reload the asset first, then we can add the splat map and save it.
@@ -68,6 +83,7 @@ namespace Assets.Sceelix.Processors.Components
             TerrainCollider collider = gameObject.AddComponent<TerrainCollider>();
 
             terrain.terrainData = newTerrain;
+            terrain.materialTemplate = terrainMat;
             collider.terrainData = newTerrain;
         }
     }

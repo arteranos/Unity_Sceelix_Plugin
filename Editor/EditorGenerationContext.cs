@@ -58,7 +58,7 @@ namespace Assets.Sceelix.Editor
                 if (!AssetDatabase.IsValidFolder(prefabFolder))
                     Directory.CreateDirectory(prefabFolder);
 
-                var prefab = PrefabUtility.CreatePrefab(prefabFolder + "/" + sceneGameObject.name + ".prefab", sceneGameObject);
+                var prefab = PrefabUtility.SaveAsPrefabAsset(sceneGameObject, prefabFolder + "/" + sceneGameObject.name + ".prefab");
                 AssetDatabase.SetLabels(prefab, new[] { "Sceelix" });
             }
 
