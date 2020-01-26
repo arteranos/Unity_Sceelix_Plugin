@@ -12,8 +12,9 @@ namespace Assets.Sceelix.Processors.Materials
         {
             Material emissiveMaterial = new Material(Shader.Find("Standard"));
 
-            emissiveMaterial.SetColor("_EmissionColor", jtoken["Properties"]["DefaultColor"].ToColor());
             emissiveMaterial.EnableKeyword("_EMISSION");
+            emissiveMaterial.SetColor("_EmissionColor", jtoken["Properties"]["DefaultColor"].ToColor());
+            emissiveMaterial.globalIlluminationFlags = MaterialGlobalIlluminationFlags.BakedEmissive;
 
             return emissiveMaterial;
         }
