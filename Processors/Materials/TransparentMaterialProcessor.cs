@@ -13,7 +13,7 @@ namespace Assets.Sceelix.Processors.Materials
             Material transparentMaterial = new Material(Shader.Find("Standard"));
 
             transparentMaterial.SetFloat("_Mode", 3);
-            transparentMaterial.SetTexture("_MainTex", CreateOrGetTexture(context, jtoken["Properties"]["Texture"]));
+            transparentMaterial.SetTexture("_MainTex", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["Texture"]));
             transparentMaterial.color = new Color(1, 1, 1, jtoken["Properties"]["Transparency"].ToObject<float>());
             transparentMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
             transparentMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);

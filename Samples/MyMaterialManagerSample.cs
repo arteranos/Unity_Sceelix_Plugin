@@ -36,7 +36,7 @@ namespace Assets.Sceelix.Samples
 
             //make use of the "DefaultMaterialManager.CreateOrGetTexture" function to decode textures. It will certainly fit most of your needs
             //Here it is assumed that, in Sceelix, you defined a texture called MyFirstTexture
-            mySpecialMaterial.mainTexture = CreateOrGetTexture(context, jtoken["Properties"]["MyFirstTexture"]);
+            mySpecialMaterial.mainTexture = Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["MyFirstTexture"]);
 
             return mySpecialMaterial;
         }
@@ -66,7 +66,7 @@ namespace Assets.Sceelix.Samples
             {
                 Material mySpecialMaterial = new Material(Shader.Find("Diffuse"));
 
-                mySpecialMaterial.mainTexture = CreateOrGetTexture(context, jtoken["Properties"]["MyTexture"]);
+                mySpecialMaterial.mainTexture = Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["MyTexture"]);
 
                 return mySpecialMaterial;
             }
@@ -81,7 +81,7 @@ namespace Assets.Sceelix.Samples
                 var existingMaterial = new Material(context.GetExistingResource<Material>("Assets/MyMaterials/New Material.mat"));
 
                 //and then read your own extra definitions
-                existingMaterial.SetTexture("_MainTex", CreateOrGetTexture(context, jtoken["Properties"]["MyTexture"]));
+                existingMaterial.SetTexture("_MainTex", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["MyTexture"]));
 
                 return existingMaterial;
             }

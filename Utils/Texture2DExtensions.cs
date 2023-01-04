@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using Assets.Sceelix.Contexts;
+using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace Assets.Sceelix.Utils
 {
@@ -11,14 +14,14 @@ namespace Assets.Sceelix.Utils
         /// <returns></returns>
         public static Texture2D ToNormalTexture(this Texture2D texture2D)
         {
-            var normalTexture = new Texture2D(texture2D.width, texture2D.height, TextureFormat.ARGB32, true);
+            var normalTexture = new Texture2D(texture2D.width, texture2D.height, TextureFormat.RGBA32, true,true);
             Color32[] colours = texture2D.GetPixels32();
             for (int i = 0; i < colours.Length; i++)
             {
                 Color32 c = colours[i];
-                c.a = c.r;
-                c.g = (byte)(255 - c.g);
-                c.r = c.b = 0;
+                /*c.a = c.r;
+                c.g = (byte)(c.g);
+                c.r = c.b = 0;*/
                 colours[i] = c;
             }
             normalTexture.SetPixels32(colours);
@@ -42,5 +45,38 @@ namespace Assets.Sceelix.Utils
 
             return mipmappedTexture;
         }
+
+
+        public static Texture2D CreateOrGetTexture(IGenerationContext context, JToken textureToken, bool setAsNormal = false)
+        {
+            if (textureToken == null)
+                return null;
+
+            var name = textureToken["Name"].ToObject<String>();
+            if (String.IsNullOrEmpty(name))
+                return null;
+
+            return context.CreateOrGetAssetOrResource(name + ".asset", () => textureToken["Content"].ToTexture(setAsNormal));
+        }
+        
+        
+        public static Texture2D ToPremultipliedTexture(this Texture2D texture2D)
+        {
+            Color[] pixels = texture2D.GetPixels();
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                var alpha = pixels[i].a;
+                pixels[i].r *= alpha;
+                pixels[i].g *= alpha;
+                pixels[i].b *= alpha;
+            }
+                
+            texture2D.SetPixels(pixels);
+            texture2D.Apply();
+
+            return texture2D;
+        }
+        
+
     }
 }

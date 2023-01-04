@@ -58,37 +58,24 @@ namespace Assets.Sceelix.Utils
             return (T)Enum.Parse(typeof(T), enumString);
         }
 
-        //private static int coiso = 0;
+        
         public static Texture2D ToTexture(this JToken jToken, bool setAsNormal = false)
         {
             Texture2D texture2D = new Texture2D(1, 1, TextureFormat.RGBA32, true);// {alphaIsTransparency = true}
 
             byte[] bytes = jToken.ToObject<byte[]>();
-            //
-            //File.WriteAllBytes(@"C:\Users\pedro\Desktop\Coiso" + coiso++ + ".png",bytes);
-
+            
             texture2D.LoadImage(bytes);
+            
+            //to support proper alpha cutouts without white borders
+            texture2D.ToPremultipliedTexture();
 
             if (setAsNormal)
             {
-                var normalTexture = new Texture2D(texture2D.width, texture2D.height, TextureFormat.ARGB32, true);
-                Color32[] colours = texture2D.GetPixels32();
-                for (int i = 0; i < colours.Length; i++)
-                {
-                    Color32 c = colours[i];
-                    c.a = c.r;
-                    c.g = (byte)(255 - c.g);
-                    c.r = c.b = 0;
-                    colours[i] = c;
-                }
-                normalTexture.SetPixels32(colours);
-                normalTexture.Apply();
-
-                return normalTexture;
+                texture2D = texture2D.ToNormalTexture();
             }
 
             return texture2D;
         }
-        
     }
 }

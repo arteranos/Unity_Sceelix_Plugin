@@ -12,7 +12,7 @@ namespace Assets.Sceelix.Processors.Materials
         {
             Material singletextureMaterial = new Material(Shader.Find("Standard"));
 
-            singletextureMaterial.mainTexture = CreateOrGetTexture(context, jtoken["Properties"]["Texture"]);
+            singletextureMaterial.mainTexture = Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["Texture"]);
             singletextureMaterial.SetFloat("_Glossiness", 0);
             singletextureMaterial.SetFloat("_Mode", 1);
             singletextureMaterial.DisableKeyword("_ALPHABLEND_ON");

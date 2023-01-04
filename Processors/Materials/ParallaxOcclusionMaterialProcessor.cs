@@ -13,10 +13,10 @@ namespace Assets.Sceelix.Processors.Materials
             //for some reason, looking for the StandardSpecular doesn't return anything...
             Material parallaxOcclusionMaterial = new Material(Shader.Find("Standard"));
 
-            parallaxOcclusionMaterial.SetTexture("_MainTex", CreateOrGetTexture(context, jtoken["Properties"]["DiffuseTexture"]));
-            parallaxOcclusionMaterial.SetTexture("_MetallicGlossMap", CreateOrGetTexture(context, jtoken["Properties"]["SpecularTexture"]));
-            parallaxOcclusionMaterial.SetTexture("_BumpMap", CreateOrGetTexture(context, jtoken["Properties"]["NormalTexture"], true));
-            parallaxOcclusionMaterial.SetTexture("_ParallaxMap", CreateOrGetTexture(context, jtoken["Properties"]["HeightTexture"]));
+            parallaxOcclusionMaterial.SetTexture("_MainTex", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["DiffuseTexture"]));
+            parallaxOcclusionMaterial.SetTexture("_MetallicGlossMap", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["SpecularTexture"]));
+            parallaxOcclusionMaterial.SetTexture("_BumpMap", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["NormalTexture"], true));
+            parallaxOcclusionMaterial.SetTexture("_ParallaxMap", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["HeightTexture"]));
             parallaxOcclusionMaterial.EnableKeyword("_NORMALMAP");
             parallaxOcclusionMaterial.EnableKeyword("_PARALLAXMAP");
 

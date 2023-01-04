@@ -22,16 +22,16 @@ namespace Assets.Sceelix.Processors.Materials
                 importedMaterial.SetFloat("_Glossiness", jtoken["Properties"]["Shininess"].ToObject<float>());
 
             if (jtoken["Properties"]["DiffuseTexture"] != null)
-                importedMaterial.SetTexture("_MainTex", CreateOrGetTexture(context, jtoken["Properties"]["DiffuseTexture"]));
+                importedMaterial.SetTexture("_MainTex", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["DiffuseTexture"]));
 
             if (jtoken["Properties"]["SpecularTexture"] != null)
-                importedMaterial.SetTexture("_MetallicGlossMap", CreateOrGetTexture(context, jtoken["Properties"]["SpecularTexture"]));
+                importedMaterial.SetTexture("_MetallicGlossMap", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["SpecularTexture"]));
 
             if (jtoken["Properties"]["NormalTexture"] != null)
-                importedMaterial.SetTexture("_BumpMap", CreateOrGetTexture(context, jtoken["Properties"]["NormalTexture"], true));
+                importedMaterial.SetTexture("_BumpMap", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["NormalTexture"], true));
 
             if (jtoken["Properties"]["HeightTexture"] != null)
-                importedMaterial.SetTexture("_ParallaxMap", CreateOrGetTexture(context, jtoken["Properties"]["HeightTexture"]));
+                importedMaterial.SetTexture("_ParallaxMap", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["HeightTexture"]));
 
 
             return importedMaterial;

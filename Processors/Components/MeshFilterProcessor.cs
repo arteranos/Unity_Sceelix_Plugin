@@ -27,11 +27,11 @@ namespace Assets.Sceelix.Processors.Components
             var meshToken = jtoken["Mesh"];
             var meshName = meshToken["Name"].ToObject<String>();
 
-
-
             var newMesh = context.CreateOrGetAssetOrResource<Mesh>(meshName + ".asset", () =>
             {
                 var mesh = new Mesh();
+                
+                mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
                 
                 mesh.vertices = meshToken["Positions"].Children().Select(x => JTokenExtensions.ToVector3(x)).ToArray();
                 mesh.normals = meshToken["Normals"].Children().Select(x => x.ToVector3()).ToArray();

@@ -12,9 +12,9 @@ namespace Assets.Sceelix.Processors.Materials
         {
             Material textureAndBump = new Material(Shader.Find("Standard"));
 
-            textureAndBump.SetTexture("_MainTex", CreateOrGetTexture(context, jtoken["Properties"]["DiffuseTexture"]));
-            textureAndBump.SetTexture("_MetallicGlossMap", CreateOrGetTexture(context, jtoken["Properties"]["SpecularTexture"]));
-            textureAndBump.SetTexture("_BumpMap", CreateOrGetTexture(context, jtoken["Properties"]["NormalTexture"], true));
+            textureAndBump.SetTexture("_MainTex", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["DiffuseTexture"]));
+            textureAndBump.SetTexture("_MetallicGlossMap", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["SpecularTexture"]));
+            textureAndBump.SetTexture("_BumpMap", Texture2DExtensions.CreateOrGetTexture(context, jtoken["Properties"]["NormalTexture"], true));
             textureAndBump.EnableKeyword("_NORMALMAP");
 
             return textureAndBump;

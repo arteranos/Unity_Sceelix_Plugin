@@ -25,7 +25,7 @@ namespace Assets.Sceelix.Processors.Materials
                     case "TextureSlot":
                         var textureType = propertyToken["Value"]["Type"].ToObject<String>();
                         bool isNormal = textureType == "Normal";
-                        customMaterial.SetTexture(propertyName, CreateOrGetTexture(context, propertyToken["Value"], isNormal));
+                        customMaterial.SetTexture(propertyName, Texture2DExtensions.CreateOrGetTexture(context, propertyToken["Value"], isNormal));
                         break;
                     case "Boolean":
                         var status = propertyToken["Value"].ToObject<bool>();
