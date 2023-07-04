@@ -20,7 +20,8 @@ namespace Assets.Sceelix.Processors.Materials
             if (remoteMaterial == null)
                 Debug.LogWarning(String.Format("Could not find material with the path {0}.", path));
 
-            return remoteMaterial;
+            // Copy the material to detach the asset store entry
+            return new Material(remoteMaterial);
         }
     }
 }
