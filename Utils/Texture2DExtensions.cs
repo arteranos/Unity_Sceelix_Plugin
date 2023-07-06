@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using Assets.Sceelix.Contexts;
+using Newtonsoft.Json.Linq;
+using System;
+using UnityEngine;
 
 namespace Assets.Sceelix.Utils
 {
@@ -42,5 +45,18 @@ namespace Assets.Sceelix.Utils
 
             return mipmappedTexture;
         }
+
+        public static Texture2D CreateOrGetTexture(IGenerationContext context, JToken textureToken, bool setAsNormal = false)
+        {
+            if(textureToken == null)
+                return null;
+
+            var name = textureToken["Name"].ToObject<String>();
+            if(String.IsNullOrEmpty(name))
+                return null;
+
+            return context.CreateOrGetAssetOrResource(name + ".asset", () => textureToken["Content"].ToTexture(setAsNormal));
+        }
+
     }
 }
