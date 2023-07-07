@@ -20,34 +20,38 @@ namespace Assets.Sceelix.Processors.Materials
             {
                 var propertyName = propertyToken["Name"].ToObject<String>();
                 var propertyType = propertyToken["Type"].ToObject<String>();
+                JToken jToken = propertyToken["Value"];
                 switch (propertyType)
                 {
                     case "TextureSlot":
-                        var textureType = propertyToken["Value"]["Type"].ToObject<String>();
+                        var textureType = jToken["Type"].ToObject<String>();
                         bool isNormal = textureType == "Normal";
-                        customMaterial.SetTexture(propertyName, CreateOrGetTexture(context, propertyToken["Value"], isNormal));
+
+                        // If there's an empty texture slot, skip it and leave it on the shader's defaults.
+                        if(jToken["Content"] != null)
+                            customMaterial.SetTexture(propertyName, CreateOrGetTexture(context, jToken, isNormal));
                         break;
                     case "Boolean":
-                        var status = propertyToken["Value"].ToObject<bool>();
+                        var status = jToken.ToObject<bool>();
                         if (status)
                             customMaterial.EnableKeyword(propertyName);
                         else
                             customMaterial.DisableKeyword(propertyName);
                         break;
                     case "Color":
-                        customMaterial.SetColor(propertyName, propertyToken["Value"].ToColor());
+                        customMaterial.SetColor(propertyName, jToken.ToColor());
                         break;
                     case "Int32":
-                        customMaterial.SetInt(propertyName, propertyToken["Value"].ToObject<int>());
+                        customMaterial.SetInt(propertyName, jToken.ToObject<int>());
                         break;
                     case "Single":
-                        customMaterial.SetFloat(propertyName, propertyToken["Value"].ToObject<float>());
+                        customMaterial.SetFloat(propertyName, jToken.ToObject<float>());
                         break;
                     case "Vector4":
-                        customMaterial.SetVector(propertyName, propertyToken["Value"].ToVector4());
+                        customMaterial.SetVector(propertyName, jToken.ToVector4());
                         break;
                     case "String":
-                        customMaterial.SetOverrideTag(propertyName, propertyToken["Value"].ToObject<String>());
+                        customMaterial.SetOverrideTag(propertyName, jToken.ToObject<String>());
                         break;
                 }
             }

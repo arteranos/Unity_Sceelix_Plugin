@@ -28,7 +28,12 @@ namespace Assets.Sceelix.Processors.Materials
 
             var name = textureToken["Name"].ToObject<String>();
 
-            return context.CreateOrGetAssetOrResource(name + ".asset", () => textureToken["Content"].ToTexture(setAsNormal));
+            return context.CreateOrGetAssetOrResource(name + ".asset", () =>
+            {
+                JToken content = textureToken["Content"];
+
+                return content.ToTexture(setAsNormal);
+            });
         }
     }
 }
