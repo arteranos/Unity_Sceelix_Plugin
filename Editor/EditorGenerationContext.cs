@@ -111,6 +111,9 @@ namespace Assets.Sceelix.Editor
 
         public T CreateOrGetPhysicalAssetOrResource<T>(string assetName, Func<T> creationFunction) where T : Object
         {
+            // Especially shaders use slashes to categorize, and CustomMaterial might yell at you.
+            assetName = assetName.Replace("/", "_");
+
             var assetLocation = AssetsFolder + "/" + assetName;
 
             if (!File.Exists(assetLocation))
