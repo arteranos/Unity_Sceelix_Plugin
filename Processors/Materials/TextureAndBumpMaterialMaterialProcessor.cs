@@ -10,7 +10,7 @@ namespace Assets.Sceelix.Processors.Materials
     {
         public override Material Process(IGenerationContext context, JToken jtoken)
         {
-            Material textureAndBump = new Material(Shader.Find("Standard"));
+            Material textureAndBump = GetStandardMaterial();
 
             textureAndBump.SetTexture("_MainTex", CreateOrGetTexture(context, jtoken["Properties"]["DiffuseTexture"]));
             textureAndBump.SetTexture("_MetallicGlossMap", CreateOrGetTexture(context, jtoken["Properties"]["SpecularTexture"]));

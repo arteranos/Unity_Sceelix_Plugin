@@ -10,7 +10,7 @@ namespace Assets.Sceelix.Processors.Materials
     {
         public override Material Process(IGenerationContext context, JToken jtoken)
         {
-            Material transparentMaterial = new Material(Shader.Find("Standard"));
+            Material transparentMaterial = GetStandardMaterial();
 
             transparentMaterial.SetFloat("_Mode", 3);
             transparentMaterial.SetTexture("_MainTex", CreateOrGetTexture(context, jtoken["Properties"]["Texture"]));

@@ -10,7 +10,7 @@ namespace Assets.Sceelix.Processors.Materials
     {
         public override Material Process(IGenerationContext context, JToken jtoken)
         {
-            Material singletextureMaterial = new Material(Shader.Find("Standard"));
+            Material singletextureMaterial = GetStandardMaterial();
 
             singletextureMaterial.mainTexture = CreateOrGetTexture(context, jtoken["Properties"]["Texture"]);
             singletextureMaterial.SetFloat("_Glossiness", 0);

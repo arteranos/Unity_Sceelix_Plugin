@@ -11,7 +11,7 @@ namespace Assets.Sceelix.Processors.Materials
         public override Material Process(IGenerationContext context, JToken jtoken)
         {
             //for some reason, looking for the StandardSpecular doesn't return anything...
-            Material parallaxOcclusionMaterial = new Material(Shader.Find("Standard"));
+            Material parallaxOcclusionMaterial = GetStandardMaterial();
 
             parallaxOcclusionMaterial.SetTexture("_MainTex", CreateOrGetTexture(context, jtoken["Properties"]["DiffuseTexture"]));
             parallaxOcclusionMaterial.SetTexture("_MetallicGlossMap", CreateOrGetTexture(context, jtoken["Properties"]["SpecularTexture"]));

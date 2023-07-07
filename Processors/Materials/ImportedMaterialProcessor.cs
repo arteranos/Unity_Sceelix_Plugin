@@ -10,7 +10,7 @@ namespace Assets.Sceelix.Processors.Materials
     {
         public override Material Process(IGenerationContext context, JToken jtoken)
         {
-            Material importedMaterial = new Material(Shader.Find("Standard"));
+            Material importedMaterial = GetStandardMaterial();
 
             if (jtoken["Properties"]["ColorDiffuse"] != null)
                 importedMaterial.color = jtoken["Properties"]["ColorDiffuse"].ToColor();

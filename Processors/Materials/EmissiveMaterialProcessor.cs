@@ -10,7 +10,7 @@ namespace Assets.Sceelix.Processors.Materials
     {
         public override Material Process(IGenerationContext context, JToken jtoken)
         {
-            Material emissiveMaterial = new Material(Shader.Find("Standard"));
+            Material emissiveMaterial = GetStandardMaterial();
 
             emissiveMaterial.EnableKeyword("_EMISSION");
             emissiveMaterial.SetColor("_EmissionColor", jtoken["Properties"]["DefaultColor"].ToColor());
