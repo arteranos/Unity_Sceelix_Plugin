@@ -11,48 +11,47 @@ namespace Assets.Sceelix.Processors.Materials
     {
         public override Material Process(IGenerationContext context, JToken jtoken)
         {
-            var shaderName = jtoken["Shader"].ToObject<String>();
+            string shaderName = jtoken["Shader"].ToObject<String>();
 
-            Material customMaterial = new Material(Shader.Find(shaderName));
+            Material customMaterial = new(Shader.Find(shaderName));
 
 
             foreach (JToken propertyToken in jtoken["Properties"].Children())
             {
-                var propertyName = propertyToken["Name"].ToObject<String>();
-                var propertyType = propertyToken["Type"].ToObject<String>();
-                JToken jToken = propertyToken["Value"];
+                string propertyName = propertyToken["Name"].ToObject<String>();
+                string propertyType = propertyToken["Type"].ToObject<String>();
+                JToken valueToken = propertyToken["Value"];
                 switch (propertyType)
                 {
                     case "TextureSlot":
-                        var textureType = jToken["Type"].ToObject<String>();
-                        string textureName = (string) jToken["Name"];
-                        bool isNormal = textureType == "Normal";
+                        string textureType = valueToken["Type"].ToObject<String>();
+                        string textureName = (string) valueToken["Name"];
 
                         // If there's an empty texture slot, skip it and leave it on the shader's defaults.
                         if(!string.IsNullOrEmpty(textureName))
-                            customMaterial.SetTexture(propertyName, CreateOrGetTexture(context, jToken, isNormal));
+                            customMaterial.SetTexture(propertyName, CreateOrGetTexture(context, valueToken, textureType == "Normal"));
                         break;
                     case "Boolean":
-                        var status = jToken.ToObject<bool>();
+                        bool status = valueToken.ToObject<bool>();
                         if (status)
                             customMaterial.EnableKeyword(propertyName);
                         else
                             customMaterial.DisableKeyword(propertyName);
                         break;
                     case "Color":
-                        customMaterial.SetColor(propertyName, jToken.ToColor());
+                        customMaterial.SetColor(propertyName, valueToken.ToColor());
                         break;
                     case "Int32":
-                        customMaterial.SetInt(propertyName, jToken.ToObject<int>());
+                        customMaterial.SetInt(propertyName, valueToken.ToObject<int>());
                         break;
                     case "Single":
-                        customMaterial.SetFloat(propertyName, jToken.ToObject<float>());
+                        customMaterial.SetFloat(propertyName, valueToken.ToObject<float>());
                         break;
                     case "Vector4":
-                        customMaterial.SetVector(propertyName, jToken.ToVector4());
+                        customMaterial.SetVector(propertyName, valueToken.ToVector4());
                         break;
                     case "String":
-                        customMaterial.SetOverrideTag(propertyName, jToken.ToObject<String>());
+                        customMaterial.SetOverrideTag(propertyName, valueToken.ToObject<String>());
                         break;
                 }
             }
