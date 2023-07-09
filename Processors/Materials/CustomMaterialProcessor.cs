@@ -25,10 +25,11 @@ namespace Assets.Sceelix.Processors.Materials
                 {
                     case "TextureSlot":
                         var textureType = jToken["Type"].ToObject<String>();
+                        string textureName = (string) jToken["Name"];
                         bool isNormal = textureType == "Normal";
 
                         // If there's an empty texture slot, skip it and leave it on the shader's defaults.
-                        if(jToken["Content"] != null)
+                        if(!string.IsNullOrEmpty(textureName))
                             customMaterial.SetTexture(propertyName, CreateOrGetTexture(context, jToken, isNormal));
                         break;
                     case "Boolean":
