@@ -1,0 +1,17 @@
+{
+    "name": "sceelix.plugin.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3dde13b7666f8df4d9c31becec0edf58",
+        "GUID:c15452b06dd9ada478742c324e365aca"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

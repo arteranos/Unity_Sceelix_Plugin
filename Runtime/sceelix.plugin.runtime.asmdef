@@ -1,0 +1,16 @@
+{
+    "name": "sceelix.plugin.runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3dde13b7666f8df4d9c31becec0edf58"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
