@@ -1,0 +1,21 @@
+{
+  "name": "com.willneedit.sceelix_plugin",
+  "displayName": "Sceelix plugin",
+  "version": "1.1.0",
+  "unity": "2021.3",
+  "description": "Sceelix plugin for Unity",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/willneedit/Unity_Sceelix_Plugin.git"
+  },
+  "keywords": [
+    "Sceelix",
+    "Plugin"
+  ],
+  "author": "willneedit",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/willneedit/Unity_Sceelix_Plugin.git"
+  },
+  "homepage": "https://github.com/willneedit/Unity_Sceelix_Plugin.git#readme"
+}
