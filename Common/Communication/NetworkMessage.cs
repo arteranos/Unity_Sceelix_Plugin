@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Assets.Sceelix.Communication
 {
     public class NetworkMessage
     {
-        private static JsonSerializerSettings _settings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects, TypeNameHandling = TypeNameHandling.Auto,ObjectCreationHandling = ObjectCreationHandling.Replace,Binder = new JsonBinder()};
+        private static JsonSerializerSettings _settings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects, TypeNameHandling = TypeNameHandling.Auto,ObjectCreationHandling = ObjectCreationHandling.Replace,SerializationBinder = new JsonBinder()};
 
 
         public String Subject;
@@ -36,11 +36,17 @@ namespace Assets.Sceelix.Communication
 
 
 
-        internal class JsonBinder : SerializationBinder
+        internal class JsonBinder : ISerializationBinder
         {
-            public override Type BindToType(string assemblyName, string typeName)
+            public Type BindToType(string assemblyName, string typeName)
             {
                 return Type.GetType(typeName);
+            }
+
+            public void BindToName(Type serializedType, out string assemblyName, out string typeName)
+            {
+                assemblyName = null;
+                typeName = serializedType.Name;
             }
         }
     }

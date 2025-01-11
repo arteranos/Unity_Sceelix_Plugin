@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Assets.Sceelix.Utils
 {
     public class JsonSerialization
     {
-        private static JsonSerializerSettings settings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects, TypeNameHandling = TypeNameHandling.Auto, ObjectCreationHandling = ObjectCreationHandling.Replace, Binder = new JsonBinder() };
+        private static JsonSerializerSettings settings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects, TypeNameHandling = TypeNameHandling.Auto, ObjectCreationHandling = ObjectCreationHandling.Replace, SerializationBinder = new JsonBinder() };
 
         /// <summary>
         /// Saves an object to a json file.
@@ -60,11 +60,17 @@ namespace Assets.Sceelix.Utils
     }
 
     //Looks like Unity does not support the .NET 4 version of SerializationBinder which has the BindToName function
-    internal class JsonBinder : SerializationBinder
+    internal class JsonBinder : ISerializationBinder
     {
-        public override Type BindToType(string assemblyName, string typeName)
+        public Type BindToType(string assemblyName, string typeName)
         {
             return Type.GetType(typeName);
+        }
+
+        public void BindToName(Type serializedType, out string assemblyName, out string typeName)
+        {
+            assemblyName = null;
+            typeName = serializedType.Name;
         }
     }
 }
