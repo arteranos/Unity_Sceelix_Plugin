@@ -11,7 +11,9 @@ using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
-
+using Unity.EditorCoroutines;
+using Unity.EditorCoroutines.Editor;
+using System.Collections;
 
 [InitializeOnLoad]
 [ExecuteInEditMode]
@@ -114,12 +116,18 @@ public class SceelixConnectorWindow : EditorWindow
         Stop();
     }
 
+    private IEnumerator UpdateCoroutine()
+    {
+        while(IsConnected)
+        {
+            _messageClient.Synchronize();
+
+            yield return null;
+        }
+    }
 
     public void Update()
     {
-        if(IsConnected)
-            _messageClient.Synchronize();
-
         //It is imperative to close the socket on compilation, otherwise Unity will hang
         if (EditorApplication.isCompiling || EditorApplication.isPlayingOrWillChangePlaymode)
         {
@@ -264,13 +272,16 @@ public class SceelixConnectorWindow : EditorWindow
         Start(_host, _port, _pingPeriod);
     }
 
-
+    private EditorCoroutine _cor = null;
 
     /// <summary>
     /// Starts the Sceelix Connector using the indicated hostname and port.
     /// </summary>
     public void Start(String hostName, int port, int poolPeriod)
     {
+        if(_cor != null) EditorCoroutineUtility.StopCoroutine(_cor);
+        _cor = EditorCoroutineUtility.StartCoroutineOwnerless(UpdateCoroutine());
+
         //make sure we close a previously existing connection
         if (IsConnected)
             _messageClient.Disconnect();

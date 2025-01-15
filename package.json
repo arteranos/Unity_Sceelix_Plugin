@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/willneedit/Unity_Sceelix_Plugin.git"
   },
-  "homepage": "https://github.com/willneedit/Unity_Sceelix_Plugin.git#readme"
+  "homepage": "https://github.com/willneedit/Unity_Sceelix_Plugin.git#readme",
+  "dependencies": {
+    "com.unity.editorcoroutines": "1.0.0"
+  }
 }
