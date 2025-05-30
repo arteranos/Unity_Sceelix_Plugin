@@ -17,8 +17,8 @@ namespace Assets.Sceelix.Processors.Components
                 return;
 
             rigidbody.mass = jtoken["Properties"]["Mass"].ToObject<float>();
-            rigidbody.drag = jtoken["Properties"]["Drag"].ToObject<float>();
-            rigidbody.angularDrag = jtoken["Properties"]["Angular Drag"].ToObject<float>();
+            rigidbody.linearDamping = jtoken["Properties"]["Drag"].ToObject<float>();
+            rigidbody.angularDamping = jtoken["Properties"]["Angular Drag"].ToObject<float>();
             rigidbody.useGravity = jtoken["Properties"]["Use Gravity"].ToObject<bool>();
             rigidbody.isKinematic = jtoken["Properties"]["Is Kinematic"].ToObject<bool>();
             rigidbody.interpolation = jtoken["Properties"]["Interpolate"].ToEnum<RigidbodyInterpolation>();
