@@ -1,4 +1,5 @@
-﻿using Assets.Sceelix.Contexts;
+﻿using System.Linq;
+using Assets.Sceelix.Contexts;
 using Assets.Sceelix.Utils;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -16,9 +17,17 @@ namespace Assets.Sceelix.Processors.Components
             if (meshCollider == null)
                 return;
 
-            meshCollider.sharedMesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
-            meshCollider.convex = jtoken["Properties"]["IsConvex"].ToObject<bool>();
-            meshCollider.isTrigger = jtoken["Properties"]["IsTrigger"].ToObject<bool>();
+            var properties = jtoken["Properties"];
+
+            JToken meshToken = properties["Mesh"];
+
+            if (meshToken != null)
+                meshCollider.sharedMesh = Utils.GetMesh(context, meshToken["MeshFilter"]["Mesh"]);
+            else
+                meshCollider.sharedMesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
+
+            meshCollider.convex = properties["IsConvex"].ToObject<bool>();
+            meshCollider.isTrigger = properties["IsTrigger"].ToObject<bool>();
         }
     }
 }

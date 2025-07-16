@@ -8,31 +8,15 @@ using Object = UnityEngine.Object;
 
 namespace Assets.Sceelix.Processors.Components
 {
-    [Processor("MeshFilter")]
-    public class MeshFilterProcessor : ComponentProcessor
+    public static class Utils
     {
-        public override void Process(IGenerationContext context, GameObject gameObject, JToken jtoken)
+        public static Mesh GetMesh(IGenerationContext context, JToken meshToken)
         {
-            GameObject realGameObject = gameObject;
-
-            //if a meshfilter already exists, don't overwrite it
-            if (gameObject.GetComponent<MeshFilter>() != null)
-                gameObject = new GameObject();
-
-            MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
-
-            if (meshFilter == null)
-                return;
-
-            var meshToken = jtoken["Mesh"];
             var meshName = meshToken["Name"].ToObject<String>();
-
-
-
             var newMesh = context.CreateOrGetAssetOrResource<Mesh>(meshName + ".asset", () =>
             {
                 var mesh = new Mesh();
-                
+
                 mesh.vertices = meshToken["Positions"].Children().Select(x => JTokenExtensions.ToVector3(x)).ToArray();
                 mesh.normals = meshToken["Normals"].Children().Select(x => x.ToVector3()).ToArray();
                 mesh.colors = meshToken["Colors"].Children().Select(x => x.ToColor()).ToArray();
@@ -53,8 +37,29 @@ namespace Assets.Sceelix.Processors.Components
 
                 return mesh;
             });
+            return newMesh;
+        }
+    }
+    
+    [Processor("MeshFilter")]
+    public class MeshFilterProcessor : ComponentProcessor
+    {
+        public override void Process(IGenerationContext context, GameObject gameObject, JToken jtoken)
+        {
+            GameObject realGameObject = gameObject;
 
-            meshFilter.sharedMesh = newMesh;
+            //if a meshfilter already exists, don't overwrite it
+            if (gameObject.GetComponent<MeshFilter>() != null)
+                gameObject = new GameObject();
+
+            MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
+
+            if (meshFilter == null)
+                return;
+
+            var meshToken = jtoken["Mesh"];
+
+            meshFilter.sharedMesh = Utils.GetMesh(context, meshToken);
 
             if (realGameObject != gameObject)
                 Object.DestroyImmediate(gameObject);
