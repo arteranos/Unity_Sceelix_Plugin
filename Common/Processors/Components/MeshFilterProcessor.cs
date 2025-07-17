@@ -32,6 +32,14 @@ namespace Assets.Sceelix.Processors.Components
                 {
                     int[] subList = triangleSetList[index].Children().Select(x => x.ToObject<int>()).ToArray();
 
+                    int highest = subList.Max();
+                    if (highest > UInt16.MaxValue)
+                    {
+                        if (SystemInfo.supports32bitsIndexBuffer)
+                            Debug.LogError($"{meshName}: More than 65535 vertices, which is not supported in this platform. Split up your meshes into smaller parts.");
+                        else
+                            Debug.LogWarning($"{meshName}: More than 65535 vertices, which may be unsupported on other platform. Suggest to split up your meshes.");
+                    }
                     mesh.SetTriangles(subList, index);
                 }
 
@@ -40,7 +48,7 @@ namespace Assets.Sceelix.Processors.Components
             return newMesh;
         }
     }
-    
+
     [Processor("MeshFilter")]
     public class MeshFilterProcessor : ComponentProcessor
     {
