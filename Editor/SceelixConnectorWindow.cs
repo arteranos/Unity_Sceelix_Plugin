@@ -75,7 +75,7 @@ public class SceelixConnectorWindow : EditorWindow
 
 
     // Add menu named "My Window" to the Window menu
-    [MenuItem("Tools/Sceelix")]
+    [MenuItem("Window/Asset Generation/Sceelix Connection")]
     static void Init()
     {
         // Get existing open window or if none, make a new one:
