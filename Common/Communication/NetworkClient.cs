@@ -60,8 +60,20 @@ namespace Assets.Sceelix.Communication
             //The only option available is to catch exceptions when writing to the stream.
             //so we send this message periodically (which should just be ignored on the other side) to figure 
             //out if the connection is active
-            if(Connected)
-                SendRawMessage(String.Empty);
+            if (Connected)
+            {
+                try
+                {
+                    SendRawMessage(String.Empty);
+                }
+                catch (Exception)
+                {
+                    //UnityEngine.Debug.LogException(ex);
+                    Disconnect();
+                    throw;
+                }
+
+            }
         }
 
 
@@ -96,14 +108,17 @@ namespace Assets.Sceelix.Communication
                         }
                         catch (Exception ex)
                         {
-                            if(ErrorOccurred != null)
+                            if (ErrorOccurred != null)
                                 ErrorOccurred.Invoke(ex);
                         }
                     }
                 }
             }
-                //when the connection is closed, this exception will be thrown, ending the threaded function
-            catch (IOException)
+            catch (ObjectDisposedException) // Because the connection is already found dead and cleaned up
+            {
+
+            }
+            catch (IOException) // Because we closed the connerction on our side
             {
                 if (ClientDisconnected != null)
                     ClientDisconnected();
@@ -188,8 +203,7 @@ namespace Assets.Sceelix.Communication
             _processMessageThread.Abort();
             _pingTimer.Dispose();
         
-            if (ClientDisconnected != null)
-                ClientDisconnected();
+            ClientDisconnected?.Invoke();
         }
 
 
