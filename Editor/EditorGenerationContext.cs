@@ -10,6 +10,15 @@ namespace Assets.Sceelix.Editor
 {
     public class EditorGenerationContext : IGenerationContext
     {
+        public bool StorePhysicalAssets { get; set; }
+        public bool RemoveOnRegeneration { get; set; }
+        public string AssetsFolder { get; set; }
+        public bool FrameResult { get; set; }
+        public bool CreatePrefab { get; set; }
+        public bool AddToScene { get; set; }
+        public bool AutoCleanup { get; set; }
+        public bool GenerateLighmapUVs { get; set; }
+
         private readonly Dictionary<String, Object> _cachedResources = new Dictionary<string, Object>();
 
         public void ReportStart()
@@ -26,11 +35,11 @@ namespace Assets.Sceelix.Editor
             EditorUtility.DisplayProgressBar("Loading Sceelix Data", "Please wait...", percentage);
         }
 
-        
+
 
         public void ReportEnd()
         {
-            if(StorePhysicalAssets && AutoCleanup)
+            if (StorePhysicalAssets && AutoCleanup)
                 AssetReferenceManager.CleanupAndUpdate(AssetsFolder);
 
             EditorUtility.ClearProgressBar();
@@ -63,7 +72,7 @@ namespace Assets.Sceelix.Editor
             }
 
             //if the goal was not to add it to the scene, delete it
-            if(!AddToScene)
+            if (!AddToScene)
                 Object.DestroyImmediate(sceneGameObject);
         }
 
@@ -107,7 +116,7 @@ namespace Assets.Sceelix.Editor
             return (T)asset;
         }
 
-        
+
 
         public T CreateOrGetPhysicalAssetOrResource<T>(string assetName, Func<T> creationFunction) where T : Object
         {
@@ -168,54 +177,16 @@ namespace Assets.Sceelix.Editor
             AssetDatabase.Refresh();
         }
 
-        public bool StorePhysicalAssets
+        public void PostProcessAsset<T>(T obj) where T : Object
         {
-            get; set;
+            if (obj is Mesh mesh) PostProcessMeshAsset(mesh);
+            else throw new NotImplementedException($"{obj.GetType().FullName}: Postprocessing not implemented, and not supposed to");
         }
 
-
-
-        public bool RemoveOnRegeneration
+        public void PostProcessMeshAsset(Mesh mesh)
         {
-            get; set;
-        }
-
-
-
-        public string AssetsFolder
-        {
-            get; set;
-        }
-
-
-
-        public bool FrameResult
-        {
-            get; set;
-        }
-
-
-
-        public bool CreatePrefab
-        {
-            get;
-            set;
-        }
-
-
-
-        public bool AddToScene
-        {
-            get;
-            set;
-        }
-
-
-
-        public bool AutoCleanup
-        {
-            get;
-            set;
+            if (GenerateLighmapUVs)
+                mesh.uv2 = Unwrapping.GeneratePerTriangleUV(mesh);
         }
     }
 }

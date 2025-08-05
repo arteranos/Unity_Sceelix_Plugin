@@ -79,6 +79,9 @@ namespace Assets.Sceelix.Processors.Components
 
             meshFilter.sharedMesh = Utils.GetMesh(context, meshToken);
 
+            // Bounce back to the context, because UV generation is Editor only
+            context.PostProcessAsset(meshFilter.sharedMesh);
+
             if (realGameObject != gameObject)
                 Object.DestroyImmediate(gameObject);
         }

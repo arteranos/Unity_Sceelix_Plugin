@@ -58,6 +58,9 @@ public class SceelixConnectorWindow : EditorWindow
     private bool _addToScene = true;
 
     [SerializeField]
+    private bool _generateLighmapUVs = true;
+
+    [SerializeField]
     private string _assetsFolder = "Assets/SceelixAssets";
     
     [SerializeField]
@@ -218,6 +221,7 @@ public class SceelixConnectorWindow : EditorWindow
         GUILayout.Label("Asset Generation", new GUIStyle {fontStyle = FontStyle.Bold});
         _storePhysicalAssets = EditorGUILayout.Toggle(new GUIContent("Store Physical Assets:","Indicates if, when transferring textures, materials and meshes, these should be persisted to disk (will be stored under 'SceelixAssets' by default). Doing this takes more time in the first run, but may be useful in some cases. If disabled, these assets will only be stored in memory and directly in the scene file."), _storePhysicalAssets);
         _createPrefab = EditorGUILayout.Toggle(new GUIContent("Create Prefab:", "Indicates if a prefab containing the whole scene should be created. Requires the 'Store Physical Assets' option to be enabled to work properly. Repeated prefabs with the same name will be overwritten."), _createPrefab);
+        _generateLighmapUVs = EditorGUILayout.Toggle(new GUIContent("Generate Lightmap UVs:", "Generates per-mesh UVs for the UV1 (aka lightmap) channel for baked lighting."), _generateLighmapUVs);
         _assetsFolder = EditorGUILayout.TextField(new GUIContent("Assets Folder:", "Indicates where to store the physical assets (if the previous option is enabled)."), _assetsFolder);
 
         EditorGUILayout.Space();
@@ -329,6 +333,7 @@ public class SceelixConnectorWindow : EditorWindow
             editorGenerationContext.CreatePrefab = _createPrefab;
             editorGenerationContext.AddToScene = _addToScene;
             editorGenerationContext.AutoCleanup = _autoCleanup;
+            editorGenerationContext.GenerateLighmapUVs = _generateLighmapUVs;
 
             messageProcessorAttribute.Process(editorGenerationContext, data);
         }

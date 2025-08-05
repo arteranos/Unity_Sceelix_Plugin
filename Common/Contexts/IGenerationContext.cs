@@ -64,6 +64,8 @@ namespace Assets.Sceelix.Contexts
         /// <returns>The asset if it exists, throws exception if it does not.</returns>
         T CreateOrGetAssetOrResource<T>(string assetPath, Func<T> creationFunction) where T : UnityEngine.Object;
 
+        void PostProcessAsset<T>(T asset) where T : UnityEngine.Object;
+
         /// <summary>
         /// Refreshes the assets on disk to reflect changes in memory
         /// </summary>

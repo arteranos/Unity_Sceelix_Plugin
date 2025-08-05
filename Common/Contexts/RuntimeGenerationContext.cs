@@ -85,6 +85,19 @@ namespace Assets.Sceelix.Contexts
             
         }
 
+        public void PostProcessAsset<T>(T obj) where T : Object
+        {
+            if (obj is Mesh mesh) PostProcessMeshAsset(mesh);
+            else throw new NotImplementedException($"{obj.GetType().FullName}: Postprocessing not implemented, and not supposed to");
+        }
+
+        public void PostProcessMeshAsset(Mesh mesh)
+        {
+            // TODO Lightmap UV generation is Editor only.
+            // Maybe include XAtlasSharp as an external package.
+        }
+
+
         public Dictionary<string, object> Options
         {
             get { return _options; }
