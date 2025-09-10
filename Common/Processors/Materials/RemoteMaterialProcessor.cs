@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Assets.Sceelix.Contexts;
 using Assets.Sceelix.Utils;
 using Newtonsoft.Json.Linq;
@@ -13,7 +14,7 @@ namespace Assets.Sceelix.Processors.Materials
         {
             var path = jtoken["Properties"]["Path"].ToObject<String>();
 
-            if (!path.EndsWith(".mat"))
+            if (string.IsNullOrEmpty(Path.GetExtension(path)))
                 path = path + ".mat";
 
             var remoteMaterial = context.GetExistingResource<Material>(path);
