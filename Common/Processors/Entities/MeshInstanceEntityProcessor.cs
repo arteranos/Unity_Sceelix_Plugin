@@ -16,6 +16,7 @@ namespace Assets.Sceelix.Processors.Entities
         public override IEnumerable<GameObject> Process(IGenerationContext context, JToken entityToken)
         {
             GameObject gameObject = new GameObject("Mesh Instance Entity");
+            gameObject.isStatic = true;
 
             //fill in the name, static, enabled, tag and layer fields
             ProcessCommonUnityAttributes(context, gameObject, entityToken);
