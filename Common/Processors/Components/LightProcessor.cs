@@ -1,3 +1,4 @@
+using System.Linq;
 using Assets.Sceelix.Contexts;
 using Assets.Sceelix.Utils;
 using Newtonsoft.Json.Linq;
@@ -12,13 +13,18 @@ namespace Assets.Sceelix.Processors.Components
         {
             Light light = gameObject.AddComponent<Light>();
 
-            light.type = jtoken["Properties"]["LightType"].ToEnum<LightType>();
-            light.range = jtoken["Properties"]["Range"].ToObject<float>();
-            light.color = jtoken["Properties"]["Color"].ToColor();
-            light.intensity = jtoken["Properties"]["Intensity"].ToObject<float>();
-            light.bounceIntensity = jtoken["Properties"]["Bounce Intensity"].ToObject<float>();
-            light.renderMode = jtoken["Properties"]["Render Mode"].ToEnum<LightRenderMode>();
-            light.shadows = jtoken["Properties"]["Shadow Type"].ToEnum<LightShadows>();
+            JToken properties = jtoken["Properties"];
+            light.type = properties["LightType"].ToEnum<LightType>();
+            light.range = properties["Range"].ToObject<float>();
+            light.color = properties["Color"].ToColor();
+            light.intensity = properties["Intensity"].ToObject<float>();
+            light.bounceIntensity = properties["Bounce Intensity"].ToObject<float>();
+            light.renderMode = properties["Render Mode"].ToEnum<LightRenderMode>();
+            light.shadows = properties["Shadow Type"].ToEnum<LightShadows>();
+
+            // Supported since Sceelix 1.1.0
+            if (properties["Bake Type"] != null)
+                light.lightmapBakeType = properties["Bake Type"].ToEnum<LightmapBakeType>();
         }
     }
 }
