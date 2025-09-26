@@ -42,7 +42,15 @@ namespace Assets.Sceelix.Processors.Materials
                         customMaterial.SetColor(propertyName, valueToken.ToColor());
                         break;
                     case "Int32":
-                        customMaterial.SetInt(propertyName, valueToken.ToObject<int>());
+                        // Kludge: This property is attributed to the material, not just passed through the shader.
+                        // - 0: None
+                        // - 1: Realtime Emissive
+                        // - 2: Baked Emissive
+                        // - 4: Emissive Is Black
+                        if (propertyName == "@mat_globalIlluminationFlags")
+                            customMaterial.globalIlluminationFlags = (MaterialGlobalIlluminationFlags)valueToken.ToObject<int>();
+                        else
+                            customMaterial.SetInt(propertyName, valueToken.ToObject<int>());
                         break;
                     case "Single":
                         customMaterial.SetFloat(propertyName, valueToken.ToObject<float>());
