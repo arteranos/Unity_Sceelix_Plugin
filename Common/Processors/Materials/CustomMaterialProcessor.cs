@@ -55,7 +55,15 @@ namespace Assets.Sceelix.Processors.Materials
                     case "Single":
                         customMaterial.SetFloat(propertyName, valueToken.ToObject<float>());
                         break;
-                    case "Vector4":
+                    case "Vector2D":
+                        Vector2 v2 = valueToken.ToVector2();
+                        customMaterial.SetVector(propertyName, new Vector4(v2.x, v2.y));
+                        break;
+                    case "Vector3D":
+                        Vector3 v3 = valueToken.ToVector3();
+                        customMaterial.SetVector(propertyName, new Vector4(v3.x, v3.y, v3.z));
+                        break;
+                    case "Vector4D":
                         customMaterial.SetVector(propertyName, valueToken.ToVector4());
                         break;
                     case "String":
