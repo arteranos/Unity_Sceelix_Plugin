@@ -17,19 +17,12 @@ namespace Assets.Sceelix.Processors.Components
 
         public override void Process(IGenerationContext context, GameObject gameObject, JToken jtoken)
         {
-            GameObject realGameObject = gameObject;
-
-            //if a MeshRenderer already exists, don't overwrite it
-            //this may be the case if a prefab is loaded first
-            //still, we need to run the rest of the function because we may be reading
-            //important mesh and material information into the asset manager
-            //so run this into a fake game object and then discard it
-            if (gameObject.GetComponent<MeshRenderer>() != null)
-                gameObject = new GameObject();
-
-            //var sceelixObjectComponent = gameObject.GetComponent<SceelixObjectComponent>();
-
-            MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
+            // If there's a MeshRenderer (e.g. with a provided prefab), reuse it.
+            // Use case: Sceelix-provided meshes and materials, but nonstandard renderer settings 
+            // (e.g. disabled or double-sided shadowcasting)
+            MeshRenderer renderer = gameObject.GetComponent<MeshRenderer>();
+            if(!renderer)
+                renderer = gameObject.AddComponent<MeshRenderer>();
 
             //GenericData[] genericMaterials = genericGameComponent.Get<GenericData[]>("Materials");
             var materialTokens = jtoken["Materials"].Children().ToList();
@@ -65,9 +58,6 @@ namespace Assets.Sceelix.Processors.Components
             }
 
             renderer.sharedMaterials = sharedMaterials;
-
-            if(realGameObject != gameObject)
-                Object.DestroyImmediate(gameObject);
         }
     }
 }
