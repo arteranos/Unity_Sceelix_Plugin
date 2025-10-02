@@ -64,6 +64,16 @@ namespace Assets.Sceelix.Processors.Components
                             Debug.LogWarning(String.Format("Property/Field '{0}' for component '{1}' is not defined.", propertyFieldName, componentName));
                     }
                 }
+
+                MethodInfo method = componentType.GetMethod("SceelixPostProcess", new Type[] { typeof(IGenerationContext) });
+                if (method != null)
+                {
+                    object res = method.Invoke(customComponent, new object[] { context });
+
+                    // If the Postprocessor tells us to 
+                    if (res is bool resb && resb)
+                        GameObject.DestroyImmediate(customComponent);
+                }
             }
         }
     }
