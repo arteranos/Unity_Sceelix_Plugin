@@ -12,6 +12,9 @@ namespace Assets.Sceelix.Processors.Entities
     [Processor("UnityEntity")]
     public class GameObjectEntityProcessor : EntityProcessor
     {
+        //in order to avoid infinite loops, we have to define these fields statically
+        private static readonly Dictionary<String, EntityProcessor> _entityProcessors = ProcessorAttribute.GetClassesOfType<EntityProcessor>();
+
         Dictionary<string, ComponentProcessor> _componentProcessors = ProcessorAttribute.GetClassesOfType<ComponentProcessor>();
 
         public override IEnumerable<GameObject> Process(IGenerationContext context, JToken entityToken)
@@ -105,6 +108,29 @@ namespace Assets.Sceelix.Processors.Entities
                 gameObject.transform.localScale = intendedSize;
             }
 
+            // Since Sceelix 1.2.0: Support of child actors. Build up _before_ setting up the components.
+            JToken subEntities = entityToken["SubEntities"];
+            if (subEntities != null)
+            {
+                foreach (JToken subEntityToken in entityToken["SubEntities"].Children())
+                {
+                    EntityProcessor entityProcessor;
+
+                    //if there is a processor for this entity Type, call it
+                    if (_entityProcessors.TryGetValue(subEntityToken["EntityType"].ToObject<String>(), out entityProcessor))
+                    {
+                        var childGameObjects = entityProcessor.Process(context, subEntityToken);
+                        foreach (GameObject childGameObject in childGameObjects)
+                        {
+                            childGameObject.transform.parent = gameObject.transform;
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning(String.Format("There is no defined processor for entity type {0}.", entityToken["EntityType"]));
+                    }
+                }
+            }
 
             //now, iterate over the components
             //and look for the matching component processor
