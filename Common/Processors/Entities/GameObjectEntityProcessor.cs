@@ -121,9 +121,7 @@ namespace Assets.Sceelix.Processors.Entities
                     {
                         var childGameObjects = entityProcessor.Process(context, subEntityToken);
                         foreach (GameObject childGameObject in childGameObjects)
-                        {
-                            childGameObject.transform.parent = gameObject.transform;
-                        }
+                            childGameObject.transform.SetParent(gameObject.transform, false);
                     }
                     else
                     {
